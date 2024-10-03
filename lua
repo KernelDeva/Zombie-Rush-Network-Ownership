@@ -41,7 +41,7 @@ local function killAllZombies()
                 -- Set network ownership to the player
                 local rootPart = v:FindFirstChild("HumanoidRootPart")
                 if rootPart then
-                    rootPart:SetNetworkOwner(player)
+                    rootPart:SetNetworkOwner(player) -- Take ownership of the zombie
                 end
                 
                 -- Kill the zombie
@@ -50,8 +50,13 @@ local function killAllZombies()
                     humanoid.Health = 0
                     SikusLib:Notify("Kill Notification", "You killed a zombie!")
                 end
-                
+
                 task.wait(0.1) -- Wait to reduce performance impact
+
+                -- Recall ownership back to the game
+                if rootPart then
+                    rootPart:SetNetworkOwner(nil) -- Reset ownership
+                end
             end)
 
             if not success then
@@ -76,4 +81,4 @@ end
 -- Run the script safely
 safeExecution(function()
     initializeGUI()
-end)
+end) 
